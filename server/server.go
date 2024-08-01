@@ -8,7 +8,7 @@ import (
 
 type Server struct {
 	port         int
-	router       *Router
+	Router       *Router
 	middlewares  []Middleware
 	errorHandler ErrorHandler
 	server       *http.Server
@@ -21,12 +21,12 @@ func NewServer(port int) *Server {
 		port:        port,
 		middlewares: []Middleware{},
 	}
-	s.router = NewRouter(s)
+	s.Router = NewRouter(s)
 	return s
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	s.router.ServeHTTP(w, r)
+	s.Router.ServeHTTP(w, r)
 }
 
 func (s *Server) Run() error {
@@ -42,6 +42,10 @@ func (s *Server) Run() error {
 
 func (s *Server) Shutdown(ctx context.Context) error {
 	return s.server.Shutdown(ctx)
+}
+
+func (s *Server) GetRouter() *Router {
+	return s.Router
 }
 
 type ErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
