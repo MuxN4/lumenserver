@@ -16,24 +16,24 @@ type Server struct {
 
 type ServerOption func(*Server)
 
-func NewServer(port int, options ...ServerOption) *Server {
+func NewServer(port int) *Server {
 	s := &Server{
-		port:   port,
-		router: NewRouter(),
+		port:        port,
+		middlewares: []Middleware{},
 	}
-
-	for _, option := range options {
-		option(s)
-	}
-
+	s.router = NewRouter(s)
 	return s
+}
+
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.router.ServeHTTP(w, r)
 }
 
 func (s *Server) Run() error {
 	addr := fmt.Sprintf(":%d", s.port)
 	s.server = &http.Server{
 		Addr:    addr,
-		Handler: s.router,
+		Handler: s,
 	}
 
 	fmt.Printf("Server starting on port %d\n", s.port)
@@ -42,10 +42,6 @@ func (s *Server) Run() error {
 
 func (s *Server) Shutdown(ctx context.Context) error {
 	return s.server.Shutdown(ctx)
-}
-
-func (s *Server) Use(middleware Middleware) {
-	s.middlewares = append(s.middlewares, middleware)
 }
 
 type ErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
