@@ -14,6 +14,9 @@ func Chain(h Handler, middleware ...Middleware) Handler {
 }
 
 func (s *Server) ApplyMiddleware(h Handler) Handler {
+	if len(s.middlewares) == 0 {
+		return h
+	}
 	return Chain(h, s.middlewares...)
 }
 
