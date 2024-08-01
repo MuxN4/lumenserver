@@ -10,9 +10,10 @@ type Handler func(w http.ResponseWriter, r *http.Request)
 
 type Router struct {
 	routes map[string]map[string]Handler
+	server *Server
 }
 
-func NewRouter() *Router {
+func NewRouter(server *Server) *Router {
 	return &Router{
 		routes: make(map[string]map[string]Handler),
 	}
