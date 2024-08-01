@@ -47,6 +47,7 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
+	handler = r.server.ApplyMiddleware(handler)
 	handler(w, req)
 }
 
