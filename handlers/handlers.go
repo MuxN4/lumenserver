@@ -2,21 +2,20 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 )
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Welcome to our custom HTTP server!"))
+	fmt.Fprintln(w, "Welcome to our custom HTTP server!")
 }
 
 func TimeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	currentTime := time.Now().Format(time.RFC3339)
-	w.Header().Set("Content-Type", "text/plain")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(currentTime))
+	json.NewEncoder(w).Encode(map[string]string{"time": currentTime})
 }
 
 // User represents a user in our system
@@ -26,35 +25,30 @@ type User struct {
 }
 
 func UsersHandler(w http.ResponseWriter, r *http.Request) {
-	users := []User{
-		{ID: "1", Name: "Alice"},
-		{ID: "2", Name: "Bob"},
-		{ID: "3", Name: "Charlie"},
-	}
-
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	users := []map[string]string{
+		{"id": "1", "name": "Alice"},
+		{"id": "2", "name": "Bob"},
+		{"id": "3", "name": "Charlie"},
+	}
 	json.NewEncoder(w).Encode(users)
 }
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	var newUser User
-	err := json.NewDecoder(r.Body).Decode(&newUser)
-	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+	w.Header().Set("Content-Type", "application/json")
+	var user map[string]string
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	// In a real application, you would save the user to a database here
-	newUser.ID = "4" // Just for demonstration purpose
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(newUser)
+	user["id"] = "4" // Just for demonstration purpose
+	json.NewEncoder(w).Encode(user)
 }
 
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte("404 - Page not found"))
+	fmt.Fprintln(w, "404 - Page not found")
 }
