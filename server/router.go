@@ -9,14 +9,20 @@ import (
 type Handler func(w http.ResponseWriter, r *http.Request)
 
 type Router struct {
-	routes map[string]map[string]Handler
-	server *Server
+	routes          map[string]map[string]Handler
+	server          *Server
+	notFoundHandler Handler
 }
 
 func NewRouter(server *Server) *Router {
 	return &Router{
-		routes: make(map[string]map[string]Handler),
+		routes:          make(map[string]map[string]Handler),
+		notFoundHandler: defaultNotFoundHandler,
 	}
+}
+
+func (r *Router) NotFound(handler Handler) {
+	r.notFoundHandler = handler
 }
 
 func (r *Router) addRoute(method, path string, handler Handler) {
@@ -45,7 +51,7 @@ func (r *Router) DELETE(path string, handler Handler) {
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	handler, err := r.findHandler(req.Method, req.URL.Path)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		r.notFoundHandler(w, req)
 		return
 	}
 	handler = r.server.ApplyMiddleware(handler)
@@ -85,4 +91,8 @@ func isWildcardMatch(routePath, requestPath string) bool {
 	}
 
 	return true
+}
+
+func defaultNotFoundHandler(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "404 page not found", http.StatusNotFound)
 }
