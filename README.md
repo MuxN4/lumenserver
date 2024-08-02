@@ -34,7 +34,7 @@ First things first, you'll need Go installed. I used version 1.16, but anything 
 
 1. Grab the code:
    ```
-   git clone https://github.com/yourusername/custom-http-server.git
+   git clone https://github.com/MuxN4/lumenserver.git
    ```
 2. Head into the project folder:
    ```
