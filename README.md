@@ -1,4 +1,4 @@
-# lumenserver
+# 🌟 lumenserver
 
 This project implements a robust custom HTTP server in Go, featuring a modular structure, basic routing, middleware support, and request handlers.
 
@@ -13,7 +13,7 @@ Here's what I've managed to pack into this thing:
 - A middleware system (for all that behind-the-scenes magic)
 - A structure that doesn't make me want to pull my hair out
 
-## Project Anatomy
+## Project Anatomy 🧬 
 
 Here's how I've organized this beast:
 
@@ -22,7 +22,7 @@ custom-http-server/
 ├── main.go (where the magic begins)
 ├── server/
 │   ├── server.go (the heart of our operation)
-│   ├── router.go (traffic control)
+│   ├── router.go (traffic control 🚦)
 │   └── middleware.go (our bouncer)
 └── handlers/
     └── handlers.go (does what it says on the tin)
