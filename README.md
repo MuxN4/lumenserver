@@ -78,8 +78,8 @@ Now, let's check if our middleware is doing its job (or just middleware-ing thro
 LoggingMiddleware: Check your server logs. If you see messages popping up like a chatty neighbor, it's working!
 
 RecoveryMiddleware: Time to cause some chaos! Temporarily add this to your TimeHandler:
-
-   ```func TimeHandler(w http.ResponseWriter, r *http.Request) {
+   ```
+   func TimeHandler(w http.ResponseWriter, r *http.Request) {
       panic("It's panic time!")
    }
    ```
