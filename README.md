@@ -92,7 +92,7 @@ If you see "Internal Server Error" instead of your server curling up in a corner
 
 ## Make It Your Own
 
-Feel free to tinker with this thing. Add new routes, cook up new handlers in `handlers/handlers.go`, or beef up security with some middleware. Sky's the limit!
+Feel free to tinker with this thing. Add new routes, cook up new handlers, or beef up security with some middleware. Sky's the limit!
 
 ## Wanna Contribute?
 
