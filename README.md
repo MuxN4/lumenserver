@@ -52,7 +52,7 @@ If it replies with "Welcome to our custom HTTP server!", you're golden!
    ```
    curl http://localhost:8080/time
    ```
-It should spit out the current time. Fancy, huh?
+It should spit out the current time. 
 
 3. Get a list of users (imaginary friends, perhaps?):
    ```
